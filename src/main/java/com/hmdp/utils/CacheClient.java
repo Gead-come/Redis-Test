@@ -99,11 +99,23 @@ public class CacheClient {
     }
     private static final ExecutorService CACHE_REBUILD_POOL =
             Executors.newFixedThreadPool(10);
+
+    /**
+     * 带有逻辑过期时间的查询方法
+     * @param keyPrefix
+     * @param id
+     * @param type
+     * @param dbFallback
+     * @param time
+     * @param unit
+     * @return
+     * @param <R>
+     */
     public <R> R queryWithLogicalExpire(String keyPrefix, Long id, Class<R> type,
               Function<Long, R> dbFallback, Long time, TimeUnit unit) {
         // 防止缓存穿透
         //先从redis中查询商铺缓存
-        String key = CACHE_SHOP_KEY + id;
+        String key = keyPrefix + id;
         String json = stringRedisTemplate.opsForValue().get(key);
         //判断是否存在
         if (StrUtil.isBlank(json)) {
