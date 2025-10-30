@@ -24,14 +24,23 @@ class HmDianPingApplicationTests {
     //x线程池
     private ExecutorService es = Executors.newFixedThreadPool(500);
 
+/**
+ * 测试方法：测试将店铺信息保存到Redis的功能
+ * @throws InterruptedException 可能在线程等待时被中断
+ */
     @Test
-    void testSaveShop2Redis() throws InterruptedException {
-        shopService.saveShop2Redis(1L, 10L);
+    void testSaveShop2Redis() throws InterruptedException { // 测试将店铺信息保存到Redis的方法，接收店铺ID和缓存时长参数
+        shopService.saveShop2Redis(1L, 10L); // 调用服务层方法，将ID为1的店铺信息缓存到Redis中，缓存时长为10秒
     }
+/**
+ * 测试方法：用于将店铺信息保存到缓存中
+ * 通过店铺ID获取店铺信息，并将其存入缓存，设置缓存过期时间为10秒
+ * @Test 注解表明这是一个测试方法
+ */
     @Test
-    void SaveShop(){
-        Shop shop = shopService.getById(1L);
-        cacheClient.set(CACHE_SHOP_KEY+1L,shop,10L, TimeUnit.SECONDS);
+    void SaveShop(){ // 方法名：保存店铺信息到缓存
+        Shop shop = shopService.getById(1L); // 根据ID获取店铺信息
+        cacheClient.set(CACHE_SHOP_KEY+1L,shop,10L, TimeUnit.SECONDS); // 将店铺信息存入缓存，并设置过期时间为10秒
     }
 /**
  * 测试restWorker方法，用于验证Redis工作节点的ID生成性能
